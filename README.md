@@ -6,10 +6,10 @@
 $ git clone https://github.com/Thunberg087/project.git
 ```
 ```
-npm install
+$ npm install
 ```
 ```
-npm run serve
+$ npm run serve
 ```
 
 ## Git Workflow
@@ -81,16 +81,17 @@ $ git pull origin develop
 $ npm install
 ```
 Testa koden så den funkar tillsammans med den nya koden.
-När någon har godkänt pull requestet kan du radera branchen lokalt med:
-```
-$ git branch -d <branch namn>
-```
 
 ###### Om koden funkar utan problem:
 ```
 $ git push --set-upstream origin <branch namn>
 ```
 Sedan gå till GitHub klicka på "New pull request" välj master som base branch och din topic branch som compare branch.
+
+När någon har godkänt pull requestet kan du radera branchen lokalt med:
+```
+$ git branch -d <branch namn>
+```
 
 ###### Om koden inte funkar:
 
@@ -104,7 +105,7 @@ $ git commit -m "<beskrivande meddelande>"
 ```
 $ git push --set-upstream origin <branch namn>
 ```
-Sedan gå till GitHub klicka på "New pull request" välj master som base branch och din topic branch som compare branch.
+Sedan gå till GitHub klicka på "New pull request" välj develop som base branch och din topic branch som compare branch.
 
 ### Granska någons pull request
 
