@@ -3,7 +3,7 @@
 ## Setup the project
 
 ```
-$ git clone https://github.com/Thunberg087/project.git
+$ git clone https://github.com/Thunberg087/AutoPlanner.git
 ```
 ```
 $ npm install
