@@ -19,7 +19,12 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Spartan:wght@300;531&display=swap");
+
+
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@600&family=Spartan:wght@300;500;600;900&display=swap');
+
+
+
 
 * {
   margin: 0;
