@@ -3,6 +3,7 @@
     <Login v-if="page === 'login'"/>
     <Register v-if="page === 'register'"/>
     <Forgot v-if="page === 'forgot'"/>
+    <Confirm v-if="page === 'confirm'"/>
   </div>
 </template>
 
@@ -10,12 +11,14 @@
 import Login from './../components/authentication/Login'
 import Register from './../components/authentication/Register'
 import Forgot from './../components/authentication/Forgot'
+import Confirm from './../components/authentication/Confirm'
 
 export default {
   components: {
     Login,
     Register,
-    Forgot
+    Forgot,
+    Confirm
   },
   computed: {
     page() {
@@ -29,7 +32,6 @@ export default {
   .pageWrapper {
     display: flex;
     height: calc(100vh - 50px);
-    background: #71c7ec;
   }
 
   /deep/ .form {
@@ -39,6 +41,32 @@ export default {
     background: white;
     padding: 30px;
     border-radius: 15px;
+  }
+
+  /deep/ .form  h2 {
+    font-family: 'Spartan', sans-serif;
+    font-weight: lighter;
+  }
+
+
+  /deep/ .form .errorMessage {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid rgba(255, 0, 0, 0.24);
+    border-radius: 5px;
+    font-size: 9pt;
+    background: rgba(231, 161, 161, 0.308);
+    color: #b14747;
+  }
+  
+  /deep/ .form .successMessage {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid rgba(43, 255, 0, 0.24);
+    border-radius: 5px;
+    font-size: 9pt;
+    background: rgba(177, 231, 161, 0.308);
+    color: #488e40;
   }
   
   /deep/ .form input {
