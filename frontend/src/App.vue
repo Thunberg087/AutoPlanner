@@ -33,6 +33,7 @@ export default {
 
 #app {
   min-height: 100vh;
+  background: #71c7ec;
 }
 
 #routerView {

@@ -8,19 +8,14 @@ import Authentication from './../views/Authentication'
 
 Vue.use(VueRouter)
 
-  const routes = [
+const routes = [
   {
     path: '/',
     name: 'Home',
     component: Home
   },
   {
-    path: '/about',
-    name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  },
-  {
-    path: '/auth/:page',
+    path: '/auth/:page/:token?',
     name: 'Auth',
     component: Authentication
   },

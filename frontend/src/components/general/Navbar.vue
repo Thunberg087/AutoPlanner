@@ -1,13 +1,26 @@
 <template>
   <div id="nav">
     <router-link to="/">Home</router-link>
-    <router-link to="/about">About</router-link>
-    <router-link :to="{ name: 'Auth', params: { page: 'login' } }">Logga in</router-link>
+    <router-link v-if="!isLoggedIn" :to="{ name: 'Auth', params: { page: 'login' } }">Logga in</router-link>
+    <a v-if="isLoggedIn" @click="logout">Logga ut</a>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapGetters } from "vuex";
+
+export default {
+  computed: {
+    ...mapGetters({
+      isLoggedIn: 'isLoggedIn',
+    }),
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('logout')
+    }
+  }
+};
 </script>
 
 <style scoped>
@@ -16,6 +29,7 @@ export default {};
   width: 100%;
   padding-left: 10%;
   position: fixed;
+  background: white;
 }
 
 #nav a {
@@ -26,6 +40,7 @@ export default {};
   text-decoration: none;
   font-family: 'Spartan', sans-serif;
   font-weight: lighter;
+  cursor: pointer;
 }
 
 #nav a.router-link-exact-active {
