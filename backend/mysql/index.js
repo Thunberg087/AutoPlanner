@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 
-let mysqlcredentials = require('./credentials');
+const mysqlcredentials = require('./credentials');
 
 
 const config = {

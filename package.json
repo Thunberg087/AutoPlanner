@@ -1,0 +1,22 @@
+{
+  "name": "auto-planner",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "concurrently": "^5.2.0"
+  },
+  "scripts": {
+    "dev": "concurrently \"cd frontend/ && npm run serve\" \"cd backend/ && nodemon\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Thunberg087/projekt.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Thunberg087/projekt/issues"
+  },
+  "homepage": "https://github.com/Thunberg087/projekt#readme"
+}
