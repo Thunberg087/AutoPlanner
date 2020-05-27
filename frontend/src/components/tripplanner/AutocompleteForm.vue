@@ -18,7 +18,16 @@ import axios from "axios";
 export default {
   name: "AutocompleteForm",
   created() {
-    this.getAccessToken();
+    this.axios
+      .post("http://localhost:3000/vasttrafik/getToken")
+      .then(response => {
+        this.accessToken = response.data;
+        console.log(this.accessToken);
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+    this.isOpen = true;
   },
   data() {
     return {
@@ -30,8 +39,16 @@ export default {
   },
   methods: {
     onChange() {
-      this.isOpen = true;
-      // https://api.vasttrafik.se/bin/rest.exe/v2/location.name
+      this.axios.get(
+        "https://api.vasttrafik.se/bin/rest.exe/v2/location.name?input=" +
+          search +
+          "&format=json",
+        {
+          headers: {
+            Authorization: "Bearer " + this.accessToken
+          }
+        }
+      );
     },
     filterResults() {}
     /*setResult(result) {

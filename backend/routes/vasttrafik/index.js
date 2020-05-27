@@ -1,22 +1,15 @@
 const express = require('express')
 const router = express.Router()
+const axios = require('axios')
+const querystring = require('querystring');
 
 const mysqlConnection = require('./../../mysql')
 
+let accessToken = null
 
-let accessToken = null;
-
-// (async () => {
-//   let token = await getAccessToken()
-//   console.log("Token", token);
-// })()
-
-router.get('/getAccessToken', (req, res, next) => {
-  try {
-    res.send({ message: "Hej" })
-  } catch (err) {
-    res.status(401).send()
-  }
+router.post('/getToken', async function (req, res) {
+  const token = await getAccessToken()
+  res.send(token)
 })
 
 async function getAccessToken() {
