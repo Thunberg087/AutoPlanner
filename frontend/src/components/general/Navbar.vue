@@ -1,6 +1,7 @@
 <template>
   <div id="nav">
     <router-link to="/">Home</router-link>
+    <router-link to="/plan-a-trip">Plan a trip</router-link>
     <router-link v-if="!isLoggedIn" :to="{ name: 'Auth', params: { page: 'login' } }">Logga in</router-link>
     <a v-if="isLoggedIn" @click="logout">Logga ut</a>
   </div>
@@ -12,12 +13,12 @@ import { mapGetters } from "vuex";
 export default {
   computed: {
     ...mapGetters({
-      isLoggedIn: 'isLoggedIn',
-    }),
+      isLoggedIn: "isLoggedIn"
+    })
   },
   methods: {
     logout() {
-      this.$store.dispatch('logout')
+      this.$store.dispatch("logout");
     }
   }
 };
@@ -38,7 +39,7 @@ export default {
   color: #2c3e50;
   padding: 15px 20px;
   text-decoration: none;
-  font-family: 'Spartan', sans-serif;
+  font-family: "Spartan", sans-serif;
   font-weight: lighter;
   cursor: pointer;
 }
