@@ -1,17 +1,34 @@
 <template>
   <div class="wrapper">
     <FullCalendar
+      locale="sv"
       schedulerLicenseKey="GPL-My-Project-Is-Open-Source"
       :plugins="calendarPlugins"
       :header="{
-        left: 'prev,next today',
+        left: 'prev, next, today, customButton',
         center: 'title',
         right: 'dayGridMonth, timeGridWeek, timeGridDay, listWeek'
       }"
+      :customButtons="{
+    customButton: {
+      text: 'Lägg till event!',
+      click: openAddEventPopup
+    }
+  }"
       :weekends="calendarWeekends"
       :events="calendarEvents"
-      @dateClick="handleDateClick"
     />
+    <div class="addEventPopup" v-if="statusAddEventPopup">
+      <form v-on:submit.prevent="addEvent">
+        <input v-model="eventTitle" type="text" placeholder="titel" />
+        <input v-model="eventStartTime" type="time" v-if="!eventAllDay" />
+        <input v-model="eventEndTime" type="time" v-if="!eventAllDay" />
+        <input v-model="eventStartDate" type="date" />
+        <input v-model="eventEndDate" type="date" />
+        <input v-model="eventAllDay" type="checkbox" />
+        <input type="submit" value="Lägg till" />
+      </form>
+    </div>
   </div>
 </template>
 
@@ -36,23 +53,34 @@ export default {
         interactionPlugin, // needed for dateClick
         listPlugin
       ],
+
       calendarWeekends: true,
       calendarEvents: [
         // initial event data
-        { title: "Event Now", start: new Date() }
-      ]
+      ],
+
+      statusAddEventPopup: false,
+      eventTitle: "",
+      eventStartTime: null,
+      eventEndTime: null,
+      eventStartDate: null,
+      eventEndDate: null,
+      eventAllDay: false
     };
   },
   methods: {
-    handleDateClick(arg) {
-      if (confirm("Vill du lägga till en resa " + arg.dateStr + " ?")) {
-        this.calendarEvents.push({
-          // add new event data
-          title: "",
-          start: arg.date,
-          allDay: false
-        });
-      }
+    openAddEventPopup() {
+      this.statusAddEventPopup = true;
+    },
+    addEvent() {
+      this.calendarEvents.push({
+        title: this.eventTitle,
+        start: this.eventStartDate,
+        end: this.eventEndDate,
+        startTime: this.eventStartTime,
+        endTime: this.eventEndTime,
+        allDay: this.eventAllDay
+      });
     }
   }
 };
@@ -65,5 +93,14 @@ export default {
 @import "~@fullcalendar/timegrid/main.css";
 .wrapper {
   padding: 50px;
+}
+.addEventPopup {
+  position: fixed;
+  background: greenyellow;
+  padding: 10px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%);
+  z-index: 10;
 }
 </style>

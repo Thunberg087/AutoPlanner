@@ -12,12 +12,12 @@ import { mapGetters } from "vuex";
 export default {
   computed: {
     ...mapGetters({
-      isLoggedIn: 'isLoggedIn',
-    }),
+      isLoggedIn: "isLoggedIn"
+    })
   },
   methods: {
     logout() {
-      this.$store.dispatch('logout')
+      this.$store.dispatch("logout");
     }
   }
 };
@@ -30,6 +30,7 @@ export default {
   padding-left: 10%;
   position: fixed;
   background: white;
+  z-index: 11;
 }
 
 #nav a {
@@ -38,7 +39,7 @@ export default {
   color: #2c3e50;
   padding: 15px 20px;
   text-decoration: none;
-  font-family: 'Spartan', sans-serif;
+  font-family: "Spartan", sans-serif;
   font-weight: lighter;
   cursor: pointer;
 }
