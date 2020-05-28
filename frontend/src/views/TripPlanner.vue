@@ -5,6 +5,7 @@
       <autocomplete-form default-value="Start adress"></autocomplete-form>
       <autocomplete-form default-value="Destination adress"></autocomplete-form>
     </div>
+    <trip origin="9021014006090000" dest="9021014003127000"></trip>
   </div>
 </template>
 
