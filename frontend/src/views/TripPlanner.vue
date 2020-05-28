@@ -33,6 +33,8 @@ export default {
 }
 h1 {
   padding: 16px;
+  font-family: "Spartan", sans-serif;
+  font-weight: 500;
 }
 .form {
   width: 20%;
