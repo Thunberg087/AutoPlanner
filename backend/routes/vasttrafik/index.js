@@ -39,8 +39,8 @@ async function getAccessToken() {
 }
 
 async function checkAccessToken(accessToken) {
-  let tempBool = false;
-  await axios
+
+  return await axios
     .get(
       "https://api.vasttrafik.se/bin/rest.exe/v2/location.name?input=torslanda&format=json",
       {
@@ -49,15 +49,92 @@ async function checkAccessToken(accessToken) {
         }
       }
     )
-    .then(response => {
-      tempBool = true;
-    })
+    .then(response => true)
     .catch(err => {
       console.log("False");
     });
 
-  return tempBool;
+ 
 }
 
+
+
+
+router.post('/getNearbyStops', async function (req, res) {
+  const token = await getAccessToken()
+
+  const stops = await axios
+    .get(
+      `https://api.vasttrafik.se/bin/rest.exe/v2/location.nearbystops?originCoordLat=${req.body.lat}&originCoordLong=${req.body.lng}&maxNo=20&maxDist=10000&format=json`,
+      {
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      }
+    )
+    .then(response => response.data.LocationList.StopLocation)
+    .catch(err => {
+      console.log(err);
+    });
+
+  let populatedStops = await Promise.all(stops.map(async stop => {
+    let departures = await getDepartures(stop.id, token)
+    stop.distanceMeter = calcCrow(stop.lat, stop.lon, req.body.lat, req.body.lng)
+    stop.departures = departures
+    return stop
+  }));
+
+  res.send(populatedStops)
+
+
+})
+
+
+
+async function getDepartures(id, token) {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+
+  today = yyyy + '%2F' + mm + '%2F' + dd;
+  return await axios
+    .get(
+      `https://api.vasttrafik.se/bin/rest.exe/v2/departureBoard?id=${id}&date=${today}&time=13%3A00&format=json&direction=${id}`,
+      {
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      }
+    )
+    .then(response => response.data.DepartureBoard.Departure)
+    .catch(err => {
+      console.log(err);
+    });
+}
+
+
+function calcCrow(lat1, lon1, lat2, lon2) {
+  var R = 6371; // km
+  var dLat = toRad(lat2 - lat1);
+  var dLon = toRad(lon2 - lon1);
+  var lat1 = toRad(lat1);
+  var lat2 = toRad(lat2);
+
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c;
+  if (d < 1) {
+    return d*1000
+  } else {
+    return d;
+  }
+}
+
+function toRad(Value) 
+{
+    return Value * Math.PI / 180;
+}
 
 module.exports = router;
