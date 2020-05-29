@@ -1,11 +1,13 @@
 <template>
   <div class="home">
     <h1>Welcome</h1>
+    <Calendar />
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import Calendar from "./../components/calendar/Calendar";
 
 export default {
   name: "Home",
@@ -30,6 +32,7 @@ export default {
     } else {
       /* geolocation IS NOT available */
     }
-  }
+  },
+  components: { Calendar }
 };
 </script>

@@ -10,10 +10,13 @@ var ls = new SecureLS({ encodingType: 'rc4', isCompression: false, encryptionSec
 Vue.use(Vuex);
 
 
-let state = {  
+let state = {
   token: '',
   user: {},
   isLoggedIn: false,
+  origin: {},
+  dest: {},
+  accessToken: ''
 };
 
 
@@ -33,6 +36,15 @@ const mutations = {
   RESET: state => {
     Object.assign(state, getDefaultState());
   },
+  SET_ORIGIN: (state, payload) => {
+    state.origin = { "id": payload.id, "name": payload.name }
+  },
+  SET_DEST: (state, payload) => {
+    state.dest = { "id": payload.id, "name": payload.name }
+  },
+  SET_ACCESS_TOKEN: (state, accessToken) => {
+    state.accessToken = accessToken
+  }
 }
 
 
@@ -70,8 +82,8 @@ const actions = {
     commit('RESET', '');
     commit('SET_IS_LOGGED_IN', false)
     if (router.currentRoute.name !== 'Home') {
-      router.push({ name: 'Home'})
-     }
+      router.push({ name: 'Home' })
+    }
   },
 }
 
