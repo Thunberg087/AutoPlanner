@@ -65,7 +65,7 @@ router.post('/getNearbyStops', async function (req, res) {
 
   const stops = await axios
     .get(
-      `https://api.vasttrafik.se/bin/rest.exe/v2/location.nearbystops?originCoordLat=${req.body.lat}&originCoordLong=${req.body.lng}&maxNo=20&maxDist=10000&format=json`,
+      `https://api.vasttrafik.se/bin/rest.exe/v2/location.nearbystops?originCoordLat=${req.body.lat}&originCoordLong=${req.body.lng}&maxNo=30&maxDist=10000&format=json`,
       {
         headers: {
           "Authorization": "Bearer " + token
@@ -77,14 +77,20 @@ router.post('/getNearbyStops', async function (req, res) {
       console.log(err);
     });
 
-  let populatedStops = await Promise.all(stops.map(async stop => {
-    let departures = await getDepartures(stop.id, token)
-    stop.distanceMeter = calcCrow(stop.lat, stop.lon, req.body.lat, req.body.lng)
-    stop.departures = departures
-    return stop
+  let populatedStops = await Promise.all(stops.map(async (stop, i) => {
+    if (stop.track == undefined) {
+      let departures = await getDepartures(stop.id, token)
+      stop.distanceMeter = calcCrow(stop.lat, stop.lon, req.body.lat, req.body.lng)
+      stop.departures = departures
+      return stop
+    }
   }));
 
-  res.send(populatedStops)
+  var filtered = populatedStops.filter(function (el) {
+    return el != null;
+  });
+
+  res.send(filtered)
 
 
 })
@@ -100,7 +106,7 @@ async function getDepartures(id, token) {
   today = yyyy + '%2F' + mm + '%2F' + dd;
   return await axios
     .get(
-      `https://api.vasttrafik.se/bin/rest.exe/v2/departureBoard?id=${id}&date=${today}&time=13%3A00&format=json&direction=${id}`,
+      `https://api.vasttrafik.se/bin/rest.exe/v2/departureBoard?id=${id}&date=${today}&time=13%3A00&format=json`,
       {
         headers: {
           "Authorization": "Bearer " + token
@@ -125,11 +131,9 @@ function calcCrow(lat1, lon1, lat2, lon2) {
     Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   var d = R * c;
-  if (d < 1) {
-    return d*1000
-  } else {
-    return d;
-  }
+
+  return d*1000
+
 }
 
 function toRad(Value) 
