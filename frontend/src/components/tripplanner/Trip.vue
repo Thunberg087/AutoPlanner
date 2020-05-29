@@ -36,33 +36,45 @@ export default {
     origin: String,
     dest: String
   },
+  watch: {
+    origin: function (newOrigin, oldOrigin) {
+      this.getTripData()
+    },
+    dest: function (newDest, oldOrigin) {
+      this.getTripData()
+    }
+  },
   methods: {
     async getTripData() {
-      const token = await this.axios
-        .post("http://localhost:3000/vasttrafik/getToken")
-        .then(response => response.data)
-        .catch(function(err) {
-          console.log(err);
-        });
 
-      this.axios
-        .get(
-          "https://api.vasttrafik.se/bin/rest.exe/v2/trip?originId=" +
-            this.origin +
-            "&destId=" +
-            this.dest +
-            "&numTrips=10&format=json",
-          {
-            headers: {
-              Authorization: "Bearer " + token
-            }
-          }
-        )
-        .then(response => {
-          this.results = response.data;
-          this.resultsReady = true;
-          console.log(this.results.TripList.Trip[0].Leg.name);
-        });
+        if (this.origin != "" && this.dest != "") {
+            const token = await this.axios
+              .post("http://localhost:3000/vasttrafik/getToken")
+              .then(response => response.data)
+              .catch(function(err) {
+                console.log(err);
+              });
+      
+            this.axios
+              .get(
+                "https://api.vasttrafik.se/bin/rest.exe/v2/trip?originId=" +
+                  this.origin +
+                  "&destId=" +
+                  this.dest +
+                  "&numTrips=10&format=json",
+                {
+                  headers: {
+                    Authorization: "Bearer " + token
+                  }
+                }
+              )
+              .then(response => {
+                this.results = response.data;
+                this.resultsReady = true;
+                console.log(this.results.TripList.Trip[0].Leg.name);
+              });
+        }
+
     }
   }
 };
