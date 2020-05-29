@@ -31,6 +31,7 @@ export default {
   padding-left: 10%;
   position: fixed;
   background: white;
+  z-index: 11;
 }
 
 #nav a {
