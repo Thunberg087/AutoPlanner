@@ -1,15 +1,16 @@
 <template>
   <div>
     <h2>Möjliga resalternativ</h2>
-
     <table v-if="resultsReady == true" class="trip-list">
       <tr>
         <th>Namn:</th>
         <th>Avgång:</th>
         <th>Ankomst:</th>
       </tr>
-      <tr v-for="(trip, i) in results.TripList.Trip" :key="i">
-        <td>{{ trip.Leg.name }}</td>
+      <tr v-for="(trip, i) in results" :key="i">
+        <td>
+          <div v-for="(leg, i) in trip.Leg" :key="i">{{ leg.name }}</div>
+        </td>
         <td>{{ trip.Leg.Origin.time }}</td>
         <td>{{ trip.Leg.Destination.time }}</td>
       </tr>
@@ -37,44 +38,54 @@ export default {
     dest: String
   },
   watch: {
-    origin: function (newOrigin, oldOrigin) {
-      this.getTripData()
+    origin: function(newOrigin, oldOrigin) {
+      this.getTripData();
     },
-    dest: function (newDest, oldOrigin) {
-      this.getTripData()
+    dest: function(newDest, oldOrigin) {
+      this.getTripData();
     }
   },
   methods: {
     async getTripData() {
-
-        if (this.origin != "" && this.dest != "") {
-            const token = await this.axios
-              .post("http://localhost:3000/vasttrafik/getToken")
-              .then(response => response.data)
-              .catch(function(err) {
-                console.log(err);
-              });
-      
-            this.axios
-              .get(
-                "https://api.vasttrafik.se/bin/rest.exe/v2/trip?originId=" +
-                  this.origin +
-                  "&destId=" +
-                  this.dest +
-                  "&numTrips=10&format=json",
-                {
-                  headers: {
-                    Authorization: "Bearer " + token
-                  }
-                }
-              )
-              .then(response => {
-                this.results = response.data;
-                this.resultsReady = true;
-                console.log(this.results.TripList.Trip[0].Leg.name);
-              });
-        }
-
+      if (this.origin != "" && this.dest != "") {
+        const token = await this.axios
+          .post("http://localhost:3000/vasttrafik/getToken")
+          .then(response => response.data)
+          .catch(function(err) {
+            console.log(err);
+          });
+        console.log(token);
+        console.log(this.origin);
+        console.log(this.dest);
+        this.axios
+          .get(
+            "https://api.vasttrafik.se/bin/rest.exe/v2/trip?originId=" +
+              this.origin +
+              "&destId=" +
+              this.dest +
+              "&numTrips=10&format=json",
+            {
+              headers: {
+                Authorization: "Bearer " + token
+              }
+            }
+          )
+          .then(response => {
+            let tripList = response.data.TripList.Trip.map(trip => {
+              console.log(trip);
+              let fixedTrip = trip;
+              if (!Array.isArray(trip.Leg)) {
+                fixedTrip.Leg = [trip.Leg];
+                return fixedTrip;
+              } else {
+                return fixedTrip;
+              }
+            });
+            console.log(JSON.stringify(tripList));
+            this.results = tripList;
+            this.resultsReady = true;
+          });
+      }
     }
   }
 };
