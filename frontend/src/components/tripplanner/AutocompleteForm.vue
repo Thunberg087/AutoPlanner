@@ -67,15 +67,17 @@ export default {
       const payload = { name: result.name, id: result.id };
 
       if (this.defaultValue === "Start adress") {
-        this.$store.commit("SET_ORIGIN", payload);
+        this.$emit("originUpdated", result.id);
       } else if (this.defaultValue === "Destination adress") {
-        this.$store.commit("SET_DEST", payload);
+        this.$emit("destUpdated", result.id);
       }
       this.isOpen = false;
     }
   },
   props: {
-    defaultValue: String
+    defaultValue: String,
+    origin: String,
+    dest: String
   }
 };
 </script>

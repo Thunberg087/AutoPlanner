@@ -35,15 +35,6 @@ const mutations = {
   },
   RESET: state => {
     Object.assign(state, getDefaultState());
-  },
-  SET_ORIGIN: (state, payload) => {
-    state.origin = { "id": payload.id, "name": payload.name }
-  },
-  SET_DEST: (state, payload) => {
-    state.dest = { "id": payload.id, "name": payload.name }
-  },
-  SET_ACCESS_TOKEN: (state, accessToken) => {
-    state.accessToken = accessToken
   }
 }
 

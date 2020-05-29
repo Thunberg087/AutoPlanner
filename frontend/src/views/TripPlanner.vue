@@ -2,10 +2,18 @@
   <div class="tripPlanner">
     <h1>Plan your trip</h1>
     <div class="form">
-      <autocomplete-form default-value="Start adress"></autocomplete-form>
-      <autocomplete-form default-value="Destination adress"></autocomplete-form>
+      <autocomplete-form
+        default-value="Start adress"
+        :origin="origin"
+        @originUpdated="origin = $event"
+      ></autocomplete-form>
+      <autocomplete-form
+        default-value="Destination adress"
+        :dest="dest"
+        @destUpdated="dest = $event"
+      ></autocomplete-form>
     </div>
-    <trip origin="9021014006090000" dest="9021014003127000"></trip>
+    <trip v-show="origin != '' && dest != ''" :origin="origin" :dest="dest"></trip>
   </div>
 </template>
 
@@ -16,6 +24,12 @@ import AutocompleteForm from "./../components/tripplanner/AutocompleteForm";
 export default {
   name: "TripPlanner",
   created() {},
+  data() {
+    return {
+      origin: "",
+      dest: ""
+    };
+  },
   components: {
     Trip,
     AutocompleteForm
