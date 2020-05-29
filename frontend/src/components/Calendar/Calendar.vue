@@ -73,12 +73,14 @@ export default {
       this.statusAddEventPopup = true;
     },
     addEvent() {
+      console.log(this.eventStartDate+"T"+this.eventStartTime);
+      console.log(this.eventEndDate+"T"+this.eventEndTime);
+      
+ 
       this.calendarEvents.push({
         title: this.eventTitle,
-        start: this.eventStartDate,
-        end: this.eventEndDate,
-        startTime: this.eventStartTime,
-        endTime: this.eventEndTime,
+        start: this.eventStartDate+"T"+this.eventStartTime,
+        end: this.eventEndDate+"T"+this.eventEndTime,
         allDay: this.eventAllDay
       });
     }
