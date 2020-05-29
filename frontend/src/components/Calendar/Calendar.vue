@@ -10,22 +10,31 @@
         right: 'dayGridMonth, timeGridWeek, timeGridDay, listWeek'
       }"
       :customButtons="{
-    customButton: {
-      text: 'Lägg till event!',
-      click: openAddEventPopup
-    }
-  }"
+        customButton: {
+          text: 'Lägg till event!',
+          click: openAddEventPopup
+        }
+      }"
+      :aspectRatio="2.8"
       :weekends="calendarWeekends"
       :events="calendarEvents"
     />
     <div class="addEventPopup" v-if="statusAddEventPopup">
       <form v-on:submit.prevent="addEvent">
-        <input v-model="eventTitle" type="text" placeholder="titel" />
-        <input v-model="eventStartTime" type="time" v-if="!eventAllDay" />
-        <input v-model="eventEndTime" type="time" v-if="!eventAllDay" />
-        <input v-model="eventStartDate" type="date" />
-        <input v-model="eventEndDate" type="date" />
-        <input v-model="eventAllDay" type="checkbox" />
+        <input v-model="eventTitle" type="text" placeholder="Titel" />
+        <div class="checkboxWrapper">
+          <input v-model="eventAllDay" type="checkbox" id="checkbox"/>
+          <label for="checkbox">Heldag</label>
+        </div>
+        
+        <div class="dateTimeBox">
+          <input v-model="eventStartDate" type="date" />
+          <input v-model="eventStartTime" type="time" v-if="!eventAllDay" />
+        </div>
+        <div class="dateTimeBox">
+          <input v-model="eventEndDate" type="date" />
+          <input v-model="eventEndTime" type="time" v-if="!eventAllDay" />
+        </div>
         <input type="submit" value="Lägg till" />
       </form>
     </div>
@@ -53,12 +62,10 @@ export default {
         interactionPlugin, // needed for dateClick
         listPlugin
       ],
-
       calendarWeekends: true,
       calendarEvents: [
         // initial event data
       ],
-
       statusAddEventPopup: false,
       eventTitle: "",
       eventStartTime: null,
@@ -73,9 +80,6 @@ export default {
       this.statusAddEventPopup = true;
     },
     addEvent() {
-      console.log(this.eventStartDate+"T"+this.eventStartTime);
-      console.log(this.eventEndDate+"T"+this.eventEndTime);
-      
  
       this.calendarEvents.push({
         title: this.eventTitle,
@@ -88,21 +92,62 @@ export default {
 };
 </script>
 
-<style lang='scss'>
+<style scoped>
 @import "~@fullcalendar/core/main.css";
 @import "~@fullcalendar/timeline/main.css";
 @import "~@fullcalendar/resource-timeline/main.css";
 @import "~@fullcalendar/timegrid/main.css";
+
+
+
+
 .wrapper {
   padding: 50px;
 }
+
+
+/deep/ .fc-view-container {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+
+/deep/ .fc-day-header  {
+  padding: 10px !important;
+}
+
+
 .addEventPopup {
   position: fixed;
-  background: greenyellow;
-  padding: 10px;
+  background: white;
+  padding: 15px;
   top: 50%;
   left: 50%;
   transform: translate(-50%);
   z-index: 10;
+  border-radius: 6px;
+  -webkit-box-shadow: 0px 0px 9px -5px rgba(138,138,138,1);
+  -moz-box-shadow: 0px 0px 9px -5px rgba(138,138,138,1);
+  box-shadow: 0px 0px 9px -5px rgba(138,138,138,1);  
+}
+
+.addEventPopup form {
+  display: grid;
+}
+
+.addEventPopup input {
+  display: block;
+  padding: 5px;
+  margin: 5px;
+  box-sizing: border-box;
+}
+
+.checkboxWrapper {
+  display: inline-flex;
+}
+
+.dateTimeBox {
+  display: inline-flex;
 }
 </style>
