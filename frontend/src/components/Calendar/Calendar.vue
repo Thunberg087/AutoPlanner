@@ -23,10 +23,10 @@
       <form v-on:submit.prevent="addEvent">
         <input v-model="eventTitle" type="text" placeholder="Titel" />
         <div class="checkboxWrapper">
-          <input v-model="eventAllDay" type="checkbox" id="checkbox"/>
+          <input v-model="eventAllDay" type="checkbox" id="checkbox" />
           <label for="checkbox">Heldag</label>
         </div>
-        
+
         <div class="dateTimeBox">
           <input v-model="eventStartDate" type="date" />
           <input v-model="eventStartTime" type="time" v-if="!eventAllDay" />
@@ -80,13 +80,16 @@ export default {
       this.statusAddEventPopup = true;
     },
     addEvent() {
- 
       this.calendarEvents.push({
         title: this.eventTitle,
-        start: this.eventStartDate+"T"+this.eventStartTime,
-        end: this.eventEndDate+"T"+this.eventEndTime,
+        start: this.eventStartDate + "T" + this.eventStartTime,
+        end: this.eventEndDate + "T" + this.eventEndTime,
         allDay: this.eventAllDay
       });
+      this.removeAddEventPopup();
+    },
+    removeAddEventPopup() {
+      this.statusAddEventPopup = false;
     }
   }
 };
@@ -98,13 +101,9 @@ export default {
 @import "~@fullcalendar/resource-timeline/main.css";
 @import "~@fullcalendar/timegrid/main.css";
 
-
-
-
 .wrapper {
   padding: 50px;
 }
-
 
 /deep/ .fc-view-container {
   background: white;
@@ -112,11 +111,9 @@ export default {
   overflow: hidden;
 }
 
-
-/deep/ .fc-day-header  {
+/deep/ .fc-day-header {
   padding: 10px !important;
 }
-
 
 .addEventPopup {
   position: fixed;
@@ -127,9 +124,9 @@ export default {
   transform: translate(-50%);
   z-index: 10;
   border-radius: 6px;
-  -webkit-box-shadow: 0px 0px 9px -5px rgba(138,138,138,1);
-  -moz-box-shadow: 0px 0px 9px -5px rgba(138,138,138,1);
-  box-shadow: 0px 0px 9px -5px rgba(138,138,138,1);  
+  -webkit-box-shadow: 0px 0px 9px -5px rgba(138, 138, 138, 1);
+  -moz-box-shadow: 0px 0px 9px -5px rgba(138, 138, 138, 1);
+  box-shadow: 0px 0px 9px -5px rgba(138, 138, 138, 1);
 }
 
 .addEventPopup form {
