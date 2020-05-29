@@ -3,18 +3,36 @@
     <h2>Möjliga resalternativ</h2>
     <table v-if="resultsReady == true" class="trip-list">
       <tr>
-        <th>Namn:</th>
+        <th>Antal byten:</th>
+        <th>Restid:</th>
         <th>Avgång:</th>
         <th>Ankomst:</th>
       </tr>
-      <tr v-for="(trip, i) in results" :key="i">
-        <td>
-          <div v-for="(leg, i) in trip.Leg" :key="i">{{ leg.name }}</div>
-        </td>
-        <!-- <td>{{ trip.Leg.Origin.time }}</td>
-        <td>{{ trip.Leg.Destination.time }}</td>-->
+      <tr v-for="(trip, i) in results" :key="i" @click="tripClicked(trip)">
+        <td>{{ trip.Leg.length - 1 }}</td>
+        <td>{{ getTravelTime(trip.Leg[0].Origin, trip.Leg[ trip.Leg.length - 1 ].Destination) }} min</td>
+        <td>{{ trip.Leg[0].Origin.time }}</td>
+        <td>{{ trip.Leg[ trip.Leg.length - 1 ].Destination.time }}</td>
       </tr>
     </table>
+
+    <div v-if="showTripDetails">
+      <h2>Resedetaljer:</h2>
+      <table class="trip-list">
+        <tr>
+          <th>Resdel:</th>
+          <th>Färdsätt:</th>
+          <th>Avgång:</th>
+          <th>Ankomst:</th>
+        </tr>
+        <tr v-for="(leg, i) in clickedTrip.Leg" :key="i">
+          <td>{{ i + 1 }}</td>
+          <td>{{ leg.name }}</td>
+          <td>{{ leg.Origin.time }}</td>
+          <td>{{ leg.Destination.time }}</td>
+        </tr>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -30,7 +48,9 @@ export default {
     return {
       results: null,
       resultsReady: false,
-      isOpen: false
+      isOpen: false,
+      clickedTrip: null,
+      showTripDetails: false
     };
   },
   props: {
@@ -46,6 +66,17 @@ export default {
     }
   },
   methods: {
+    tripClicked(trip) {
+      this.clickedTrip = trip;
+      this.showTripDetails = true;
+    },
+    getTravelTime(origin, dest) {
+      let originTime = new Date(origin.date + "T" + origin.time + ":00");
+      let destTime = new Date(dest.date + "T" + dest.time + ":00");
+      var travelTime = (destTime.getTime() - originTime.getTime()) / 1000;
+      travelTime /= 60;
+      return Math.abs(Math.round(travelTime));
+    },
     async getTripData() {
       if (this.origin != "" && this.dest != "") {
         const token = await this.axios
@@ -71,6 +102,7 @@ export default {
             }
           )
           .then(response => {
+            // Checks if Leg is not an array and if not makes it to an array, to make the data consistent
             let tripList = response.data.TripList.Trip.map(trip => {
               console.log(trip);
               let fixedTrip = trip;
@@ -81,7 +113,6 @@ export default {
                 return fixedTrip;
               }
             });
-            console.log(JSON.stringify(tripList));
             this.results = tripList;
             this.resultsReady = true;
           });
@@ -94,6 +125,7 @@ export default {
 <style scoped>
 .trip-list {
   font-family: "Spartan", sans-serif;
+  text-align: center;
   border-collapse: collapse;
   width: 100%;
   margin-top: 30px;
