@@ -11,8 +11,8 @@
         <td>
           <div v-for="(leg, i) in trip.Leg" :key="i">{{ leg.name }}</div>
         </td>
-        <td>{{ trip.Leg.Origin.time }}</td>
-        <td>{{ trip.Leg.Destination.time }}</td>
+        <!-- <td>{{ trip.Leg.Origin.time }}</td>
+        <td>{{ trip.Leg.Destination.time }}</td>-->
       </tr>
     </table>
   </div>

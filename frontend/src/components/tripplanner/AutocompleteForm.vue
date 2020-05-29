@@ -64,11 +64,10 @@ export default {
     setResult(result) {
       this.search = result.name;
       this.destID = result.id;
-      const payload = { name: result.name, id: result.id };
 
-      if (this.defaultValue === "Start adress") {
+      if (this.defaultValue === "Från") {
         this.$emit("originUpdated", result.id);
-      } else if (this.defaultValue === "Destination adress") {
+      } else if (this.defaultValue === "Till") {
         this.$emit("destUpdated", result.id);
       }
       this.isOpen = false;
