@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import TripPlanner from '../views/TripPlanner'
+import Trips from '../views/Trips'
 
 // Component Imports
 import Authentication from './../views/Authentication'
@@ -17,8 +17,8 @@ const routes = [
   },
   {
     path: '/plan-a-trip',
-    name: 'TripPlanner',
-    component: TripPlanner
+    name: 'Trips',
+    component: Trips
   },
   {
     path: '/auth/:page/:token?',
