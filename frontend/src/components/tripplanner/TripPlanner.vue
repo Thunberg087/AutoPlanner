@@ -33,9 +33,11 @@ export default {
 
 <style scoped>
 .tripPlanner {
-  display: flex;
   align-items: center;
   justify-content: center;
+  width: 70%;
+  margin: auto;
+  text-align: center;
 }
 h1 {
   display: block;

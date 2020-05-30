@@ -77,14 +77,11 @@ router.post('/getNearbyStops', async function (req, res) {
       console.log(err);
     });
 
-  let populatedStops = await Promise.all(stops.map(async (stop, i) => {
+  let populatedStops = stops.map((stop, i) => {
     if (stop.track == undefined) {
-      let departures = await getDepartures(stop.id, token)
-      stop.distanceMeter = calcCrow(stop.lat, stop.lon, req.body.lat, req.body.lng)
-      stop.departures = departures
       return stop
     }
-  }));
+  });
 
   var filtered = populatedStops.filter(function (el) {
     return el != null;
@@ -95,9 +92,10 @@ router.post('/getNearbyStops', async function (req, res) {
 
 })
 
+router.post('/getDepartures', async function (req, res) {
+  const token = await getAccessToken()
 
 
-async function getDepartures(id, token) {
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
   var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -106,18 +104,21 @@ async function getDepartures(id, token) {
   today = yyyy + '%2F' + mm + '%2F' + dd;
   return await axios
     .get(
-      `https://api.vasttrafik.se/bin/rest.exe/v2/departureBoard?id=${id}&date=${today}&time=13%3A00&format=json`,
+      `https://api.vasttrafik.se/bin/rest.exe/v2/departureBoard?id=${req.body.id}&date=${today}&time=13%3A00&format=json`,
       {
         headers: {
           "Authorization": "Bearer " + token
         }
       }
     )
-    .then(response => response.data.DepartureBoard.Departure)
+    .then(response => {
+      res.send(response.data.DepartureBoard.Departure)
+    })
     .catch(err => {
       console.log(err);
     });
-}
+});
+
 
 
 function calcCrow(lat1, lon1, lat2, lon2) {

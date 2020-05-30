@@ -6,9 +6,14 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import store from './vuex/store'
 import Fragment from 'vue-fragment'
+import VueLodash from 'vue-lodash'
+import lodash from 'lodash'
+ 
 
 axios.defaults.headers.common['Authorization'] = `Bearer ${store.state.token}`;
 
+
+Vue.use(VueLodash, { lodash: lodash })
 Vue.use(Fragment.Plugin)
 Vue.use(VueAxios, axios)
 
