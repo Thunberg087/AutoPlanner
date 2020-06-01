@@ -79,10 +79,8 @@ export default {
       navigator.geolocation.getCurrentPosition(position => {
         this.axios
           .post("http://localhost:3000/vasttrafik/getNearbyStops", {
-            // lat: position.coords.latitude,
-            // lng: position.coords.longitude
-            lat: 57.73356,
-            lng: 11.77018
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
           })
           .then(response => {
             this.stops = response.data;
