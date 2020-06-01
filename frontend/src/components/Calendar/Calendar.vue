@@ -36,6 +36,7 @@
           <input v-model="eventEndTime" type="time" v-if="!eventAllDay" />
         </div>
         <input type="submit" value="Lägg till" />
+        <p v-if="errorMessage">{{errorMessage}}</p>
       </form>
     </div>
   </div>
@@ -66,6 +67,7 @@ export default {
       calendarEvents: [
         // initial event data
       ],
+      errorMessage: null,
       statusAddEventPopup: false,
       eventTitle: "",
       eventStartTime: null,
@@ -75,18 +77,60 @@ export default {
       eventAllDay: false
     };
   },
+  watch: {
+    eventAllDay(newValue) {
+      if (newValue == true) {
+        this.eventStartTime = null;
+        this.eventEndTime = null;
+      }
+    }
+  },
+  created() {
+    let url = process.env.VUE_APP_HOST + ":" + process.env.VUE_APP_SERVER_PORT + "/";
+
+
+    this.axios
+      .post(url + "calendar/getEvents", { userId: this.$store.getters.getUser.id })
+      .then(res => {
+        this.calendarEvents = res.data
+      })
+      .catch(err => {
+        this.errorMessage = err.response.data.msg;
+      });
+  },
   methods: {
     openAddEventPopup() {
       this.statusAddEventPopup = true;
     },
     addEvent() {
-      this.calendarEvents.push({
+      let start = this.eventStartTime
+        ? this.eventStartDate + "T" + this.eventStartTime
+        : this.eventStartDate;
+      let end = this.eventEndTime
+        ? this.eventEndDate + "T" + this.eventEndTime
+        : this.eventEndDate;
+
+      let newCalendarEvent = {
         title: this.eventTitle,
-        start: this.eventStartDate + "T" + this.eventStartTime,
-        end: this.eventEndDate + "T" + this.eventEndTime,
-        allDay: this.eventAllDay
-      });
-      this.removeAddEventPopup();
+        start,
+        end,
+        allDay: this.eventAllDay,
+        userId: this.$store.getters.getUser.id
+      };
+
+     
+
+      let url = process.env.VUE_APP_HOST + ":" + process.env.VUE_APP_SERVER_PORT + "/";
+
+      this.axios
+        .post(url + "calendar/addEvent", newCalendarEvent)
+        .then(res => {
+          this.calendarEvents.push(newCalendarEvent);
+          this.removeAddEventPopup();
+        })
+        .catch(err => {
+          this.errorMessage = err.response.data.msg;
+        });
     },
     removeAddEventPopup() {
       this.statusAddEventPopup = false;
@@ -121,7 +165,6 @@ export default {
   padding: 15px;
   top: 50%;
   left: 50%;
-  transform: translate(-50%);
   z-index: 10;
   border-radius: 6px;
   -webkit-box-shadow: 0px 0px 9px -5px rgba(138, 138, 138, 1);
