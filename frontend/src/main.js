@@ -27,7 +27,7 @@ function securityCheck() {
 
   if (store.state.token) {
     axios
-    .post(url + 'users/checkIfValidSession/')
+    .post(url + 'auth/checkIfValidSession/')
     .then(response => {
       const user = {
         email: response.data.email,
