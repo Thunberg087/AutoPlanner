@@ -6,12 +6,12 @@
 </template>
 
 <script>
-import axios from "axios";
-import Calendar from "./../components/calendar/Calendar.vue";
+  import axios from 'axios'
+  import Calendar from './../components/Calendar/Calendar.vue'
 
-export default {
-  name: "Home",
-  created() {},
-  components: { Calendar }
-};
+  export default {
+    name: 'Home',
+    created() {},
+    components: { Calendar }
+  }
 </script>
