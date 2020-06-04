@@ -9,8 +9,9 @@ router.post('/addLocation', (req, res) => {
     mysqlConnection.query(
         `INSERT INTO locations (id, userId, locationName, longitude, latitude) 
         VALUES (${mysqlConnection.escape(uuid.v4())}, ${mysqlConnection.escape(req.body.userId)}, ${mysqlConnection.escape(req.body.locationName)}, 
-        ${mysqlConnection.escape(req.body.long)}, ${mysqlConnection.escape(req.body.lat)}) `, (err, result) => {
+        ${mysqlConnection.escape(req.body.longitude)}, ${mysqlConnection.escape(req.body.latitude)}) `, (err, result) => {
           if (err) {
+              console.log(req.body)
             console.log(err);
             return res.status(500).send();
           }
@@ -38,3 +39,6 @@ router.post('/deleteLocation', (req, res) => {
     // Delete location from list
     
 })
+
+
+module.exports = router;
