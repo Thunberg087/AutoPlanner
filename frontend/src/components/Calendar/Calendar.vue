@@ -1,23 +1,26 @@
 <template>
   <div class="wrapper">
     <FullCalendar
-      locale="sv"
-      schedulerLicenseKey="GPL-My-Project-Is-Open-Source"
-      :plugins="calendarPlugins"
-      :header="{
-        left: 'prev, next, today, customButton',
-        center: 'title',
-        right: 'dayGridMonth, timeGridWeek, timeGridDay, listWeek'
-      }"
-      :customButtons="{
-        customButton: {
-          text: 'Lägg till event!',
-          click: openAddEventPopup
-        }
-      }"
-      :aspectRatio="2.8"
-      :weekends="calendarWeekends"
-      :events="calendarEvents"
+    locale="sv"
+    schedulerLicenseKey="GPL-My-Project-Is-Open-Source"
+    :plugins="calendarPlugins"
+    :selectable="true"
+    :header="{
+    left: 'prev, next, today, customButton',
+    center: 'title',
+    right: 'dayGridMonth, timeGridWeek, timeGridDay, listWeek'
+    }"
+    editable: true
+    @eventClick="eventClick"
+    :customButtons="{
+    customButton: {
+    text: 'Lägg till event!',
+    click: openAddEventPopup
+    }
+    }"
+    :aspectRatio="2.8"
+    :weekends="calendarWeekends"
+    :events="calendarEvents"
     />
     <div class="addEventPopup" v-if="statusAddEventPopup">
       <form v-on:submit.prevent="addEvent">
@@ -64,6 +67,7 @@ export default {
         listPlugin
       ],
       calendarWeekends: true,
+
       calendarEvents: [
         // initial event data
       ],
@@ -86,13 +90,15 @@ export default {
     }
   },
   created() {
-    let url = process.env.VUE_APP_HOST + ":" + process.env.VUE_APP_SERVER_PORT + "/";
-
+    let url =
+      process.env.VUE_APP_HOST + ":" + process.env.VUE_APP_SERVER_PORT + "/";
 
     this.axios
-      .post(url + "calendar/getEvents", { userId: this.$store.getters.getUser.id })
+      .post(url + "calendar/getEvents", {
+        userId: this.$store.getters.getUser.id
+      })
       .then(res => {
-        this.calendarEvents = res.data
+        this.calendarEvents = res.data;
       })
       .catch(err => {
         this.errorMessage = err.response.data.msg;
@@ -117,10 +123,8 @@ export default {
         allDay: this.eventAllDay,
         userId: this.$store.getters.getUser.id
       };
-
-     
-
-      let url = process.env.VUE_APP_HOST + ":" + process.env.VUE_APP_SERVER_PORT + "/";
+      let url =
+        process.env.VUE_APP_HOST + ":" + process.env.VUE_APP_SERVER_PORT + "/";
 
       this.axios
         .post(url + "calendar/addEvent", newCalendarEvent)
@@ -134,6 +138,22 @@ export default {
     },
     removeAddEventPopup() {
       this.statusAddEventPopup = false;
+    },
+    eventClick(info) {
+      let url =
+        process.env.VUE_APP_HOST + ":" + process.env.VUE_APP_SERVER_PORT + "/";
+
+      this.axios
+        .post(url + "calendar/getEvent", { id: info.event.id })
+        .then(res => {
+          console.log(res);
+        })
+        .then(res => {
+          this.eventInfo = res.data;
+        })
+        .catch(err => {
+          // this.errorMessage = err.response.data.msg;
+        });
     }
   }
 };

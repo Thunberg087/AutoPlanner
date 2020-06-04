@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "concurrently": "^5.2.0"
+    "concurrently": "^5.2.0",
+    "vue-lodash": "^2.1.2"
   },
   "scripts": {
     "dev": "concurrently \"cd frontend/ && npm run serve\" \"cd backend/ && nodemon\""
