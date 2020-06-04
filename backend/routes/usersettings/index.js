@@ -7,7 +7,7 @@ const mysqlConnection = require('./../../mysql')
 router.post('/addLocation', (req, res) => {
 
     mysqlConnection.query(
-        `INSERT INTO locations (id, userId, locationName, long, lat) 
+        `INSERT INTO locations (id, userId, locationName, longitude, latitude) 
         VALUES (${mysqlConnection.escape(uuid.v4())}, ${mysqlConnection.escape(req.body.userId)}, ${mysqlConnection.escape(req.body.locationName)}, 
         ${mysqlConnection.escape(req.body.long)}, ${mysqlConnection.escape(req.body.lat)}) `, (err, result) => {
           if (err) {
