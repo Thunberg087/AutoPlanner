@@ -24,23 +24,40 @@
     />
     <div class="addEventPopup" v-if="statusAddEventPopup">
       <form v-on:submit.prevent="addEvent">
-        <input v-model="eventTitle" type="text" placeholder="Titel" />
+        <input v-model="newEvent.eventTitle" type="text" placeholder="Titel" />
         <div class="checkboxWrapper">
-          <input v-model="eventAllDay" type="checkbox" id="checkbox" />
+          <input v-model="newEvent.eventAllDay" type="checkbox" id="checkbox" />
           <label for="checkbox">Heldag</label>
         </div>
 
         <div class="dateTimeBox">
-          <input v-model="eventStartDate" type="date" />
-          <input v-model="eventStartTime" type="time" v-if="!eventAllDay" />
+          <input v-model="newEvent.eventStartDate" type="date" />
+          <input v-model="newEvent.eventStartTime" type="time" v-if="!newEvent.eventAllDay" />
         </div>
         <div class="dateTimeBox">
-          <input v-model="eventEndDate" type="date" />
-          <input v-model="eventEndTime" type="time" v-if="!eventAllDay" />
+          <input v-model="newEvent.eventEndDate" type="date" />
+          <input v-model="newEvent.eventEndTime" type="time" v-if="!newEvent.eventAllDay" />
         </div>
         <input type="submit" value="Lägg till" />
         <p v-if="errorMessage">{{errorMessage}}</p>
       </form>
+    </div>
+
+    <!-- 
+   - Location ska även visas, eventuellt samt busslinje visas. 
+   - Avisering skall läggas till i med en checbox (diskuteras med gruppen om nödvädnigt) 
+    typ som google kalender, notifikationstabell i databsen. 
+   - Tidsmarginal skall visas och även kunna ändras.
+   - Se busstid? Se bussen som passar bäst för tid man har lagt in?
+    -->
+
+    <div class="showEventInfoPopup" v-if="eventInfo">
+      <div class="showTitleBox">Titel: {{eventInfo.title}}</div>
+
+      <div class="showTimeBox">Start: {{eventInfo.start}}</div>
+      <div class="showTimeBox">Slut: {{eventInfo.end}}</div>
+
+      <button v-on:click="removeEventInfoPopup">Close</button>
     </div>
   </div>
 </template>
@@ -71,21 +88,24 @@ export default {
       calendarEvents: [
         // initial event data
       ],
+      newEvent: {
+        eventTitle: "",
+        eventStartTime: null,
+        eventEndTime: null,
+        eventStartDate: null,
+        eventEndDate: null,
+        eventAllDay: false
+      },
       errorMessage: null,
       statusAddEventPopup: false,
-      eventTitle: "",
-      eventStartTime: null,
-      eventEndTime: null,
-      eventStartDate: null,
-      eventEndDate: null,
-      eventAllDay: false
+      eventInfo: null
     };
   },
   watch: {
     eventAllDay(newValue) {
       if (newValue == true) {
-        this.eventStartTime = null;
-        this.eventEndTime = null;
+        this.newEvent.eventStartTime = null;
+        this.newEvent.eventEndTime = null;
       }
     }
   },
@@ -109,18 +129,18 @@ export default {
       this.statusAddEventPopup = true;
     },
     addEvent() {
-      let start = this.eventStartTime
-        ? this.eventStartDate + "T" + this.eventStartTime
-        : this.eventStartDate;
-      let end = this.eventEndTime
-        ? this.eventEndDate + "T" + this.eventEndTime
-        : this.eventEndDate;
+      let start = this.newEvent.eventStartTime
+        ? this.newEvent.eventStartDate + "T" + this.newEvent.eventStartTime
+        : this.newEvent.eventStartDate;
+      let end = this.newEvent.eventEndTime
+        ? this.newEvent.eventEndDate + "T" + this.newEvent.eventEndTime
+        : this.newEvent.eventEndDate;
 
       let newCalendarEvent = {
-        title: this.eventTitle,
+        title: this.newEvent.eventTitle,
         start,
         end,
-        allDay: this.eventAllDay,
+        allDay: this.newEvent.eventAllDay,
         userId: this.$store.getters.getUser.id
       };
       let url =
@@ -139,6 +159,7 @@ export default {
     removeAddEventPopup() {
       this.statusAddEventPopup = false;
     },
+
     eventClick(info) {
       let url =
         process.env.VUE_APP_HOST + ":" + process.env.VUE_APP_SERVER_PORT + "/";
@@ -146,14 +167,16 @@ export default {
       this.axios
         .post(url + "calendar/getEvent", { id: info.event.id })
         .then(res => {
+          this.eventInfo = res.data[0];
           console.log(res);
         })
-        .then(res => {
-          this.eventInfo = res.data;
-        })
         .catch(err => {
-          // this.errorMessage = err.response.data.msg;
+          console.log(err);
+          this.errorMessage = err.response.data.msg;
         });
+    },
+    removeEventInfoPopup() {
+      this.eventInfo = null;
     }
   }
 };
@@ -208,6 +231,33 @@ export default {
 }
 
 .dateTimeBox {
+  display: inline-flex;
+}
+
+.showEventInfoPopup {
+  position: fixed;
+  background: white;
+  padding: 15px;
+  top: 50%;
+  left: 45%;
+  z-index: 15;
+  border-radius: 6px;
+  -webkit-box-shadow: 0px 0px 9px -5px rgba(138, 138, 138, 1);
+  -moz-box-shadow: 0px 0px 9px -5px rgba(138, 138, 138, 1);
+  box-shadow: 0px 0px 9px -5px rgba(138, 138, 138, 1);
+}
+
+.showEventInfoPopup form {
+  display: grid;
+}
+
+.showEventInfoPopup input {
+  display: block;
+  padding: 5px;
+  margin: 5px;
+  box-sizing: border-box;
+}
+.showTimeBox {
   display: inline-flex;
 }
 </style>
