@@ -10,7 +10,7 @@
     </ul>
     <h2>Mina sparade locations</h2>
     <ul>
-      <li :key="location" v-for="location in userLocations">{{ location.locationName }}</li>
+      <li :key="i" v-for="(location, i) in userLocations">{{ location.locationName }} <p @click="deleteLocation(location)">TA BORT</p></li>
     </ul>
   </div>
 </template>
@@ -67,7 +67,7 @@ export default {
     },
     addLocation(pickedLocation) {
 
-      console.log("addlocation method" + pickedLocation.place_name);
+      console.log("addlocation method: " + pickedLocation.place_name);
       let url = process.env.VUE_APP_HOST + ":" + process.env.VUE_APP_SERVER_PORT + "/";
 
       let newLocation = {
@@ -80,11 +80,26 @@ export default {
       this.axios
         .post(url + "usersettings/addLocation", newLocation)
         .then(res => {
-          getLocationList();
+          this.getLocationList();
         })
         .catch(err => {
           this.errorMessage = err.response.data.msg;
         });
+    },
+    deleteLocation(pickedLocation) {
+
+      console.log("deleteLocation method: " + pickedLocation.locationName);
+      let url = process.env.VUE_APP_HOST + ":" + process.env.VUE_APP_SERVER_PORT + "/";
+
+      this.axios
+        .post(url + "usersettings/deleteLocation", pickedLocation)
+        .then(res => {
+          this.getLocationList();
+        })
+        .catch(err => {
+          this.errorMessage = err.response.data.msg;
+      });
+
     }
   }
 };

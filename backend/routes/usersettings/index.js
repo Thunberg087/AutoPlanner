@@ -36,7 +36,14 @@ router.post('/getLocationList', (req, res) => {
 
 router.post('/deleteLocation', (req, res) => {
     
-    // Delete location from list
+    mysqlConnection.query(
+        `DELETE FROM locations WHERE userId = ${mysqlConnection.escape(req.body.userId)} AND locationName = ${mysqlConnection.escape(req.body.locationName)}`, (err, result) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).send();
+          }
+          res.status(200).send(result)
+    });
     
 })
 
