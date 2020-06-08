@@ -218,6 +218,9 @@ ul {
   opacity: 1;
 }
 .saved-locations li {
+  background-color: #a5d9ef;
+  padding: 10px;
+  border-radius: 10px;
   text-align: left;
   margin: 10px;
   display: block;
