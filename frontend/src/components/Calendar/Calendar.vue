@@ -46,7 +46,7 @@
     <!-- 
    - Location ska även visas, eventuellt samt busslinje visas. 
    - Avisering skall läggas till i med en checbox (diskuteras med gruppen om nödvädnigt) 
-    typ som google kalender, notifikationstabell i databsen. 
+     typ som google kalender, notifikationstabell i databsen. 
    - Tidsmarginal skall visas och även kunna ändras.
    - Se busstid? Se bussen som passar bäst för tid man har lagt in?
     -->
