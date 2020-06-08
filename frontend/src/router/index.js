@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Trips from '../views/Trips'
+import Profile from '../views/Profile'
 
 // Component Imports
 import Authentication from './../views/Authentication'
@@ -25,6 +26,11 @@ const routes = [
     name: 'Auth',
     component: Authentication
   },
+  {
+    path: '/profil',
+    name: 'Profile',
+    component: Profile
+  }
 ]
 
 const router = new VueRouter({
