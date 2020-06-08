@@ -51,10 +51,12 @@ export default {
       if (this.searchQuery === "") {
         this.fetchedLocations = [];
       } else {
+ 
+        
         let url =
           `https://api.mapbox.com/geocoding/v5/mapbox.places/` +
           `${this.searchQuery}.json` +
-          `?access_token=pk.eyJ1Ijoic2VhcmNoLW1hY2hpbmUtdXNlci0xIiwiYSI6ImNrN2Y1Nmp4YjB3aG4zZ253YnJoY21kbzkifQ.JM5ZeqwEEm-Tonrk5wOOMw` +
+          `?access_token=${require('../../../tokens').mapboxToken}` +
           `&autocomplete=true` +
           `&country=se` +
           `&types=address` +
