@@ -26,6 +26,14 @@
       <form v-on:submit.prevent="addEvent">
         <input v-model="newEvent.eventTitle" type="text" placeholder="Titel" />
         <div class="checkboxWrapper">
+          <div class="selectWrapper">
+            <select v-model="selected">
+              <option disabled value>Välj en plats</option>
+              <option>A</option>
+              <option>B</option>
+              <option>C</option>
+            </select>
+          </div>
           <input v-model="newEvent.eventAllDay" type="checkbox" id="checkbox" />
           <label for="checkbox">Heldag</label>
         </div>
@@ -224,6 +232,11 @@ export default {
   padding: 5px;
   margin: 5px;
   box-sizing: border-box;
+}
+
+.selectWrapper {
+  display: inline-flex;
+  margin: 5px;
 }
 
 .checkboxWrapper {
