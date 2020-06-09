@@ -72,8 +72,8 @@ const actions = {
   logout: ({ commit }) => {
     commit('RESET', '');
     commit('SET_IS_LOGGED_IN', false)
-    if (router.currentRoute.name !== 'Home') {
-      router.push({ name: 'Home' })
+    if (router.currentRoute.name !== 'Trips') {
+      router.push({ name: 'Trips' })
     }
   },
 }
