@@ -53,12 +53,17 @@
         <option value="60">60</option>
       </select>
       <p id="time-margin-minutes">min</p>
+      <change-password></change-password>
     </div>
   </div>
 </template>
 
 <script>
+import ChangePassword from "./../components/usersettings/ChangePassword";
 export default {
+  components: {
+    ChangePassword
+  },
   data() {
     return {
       searchQuery: "",
