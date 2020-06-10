@@ -32,11 +32,17 @@
           <button type="submit" class="btn-cancel" @click="closeForm">Avbryt</button>
         </form>
       </div>
+      <change-password></change-password>
     </div>
   </div>
 </template>
+
 <script>
+import ChangePassword from "./../components/usersettings/ChangePassword";
 export default {
+  components: {
+    ChangePassword
+  },
   data() {
     return {
       searchQuery: "",
@@ -51,12 +57,10 @@ export default {
       if (this.searchQuery === "") {
         this.fetchedLocations = [];
       } else {
- 
-        
         let url =
           `https://api.mapbox.com/geocoding/v5/mapbox.places/` +
           `${this.searchQuery}.json` +
-          `?access_token=${require('../../../tokens').mapboxToken}` +
+          `?access_token=${require("../../../tokens").mapboxToken}` +
           `&autocomplete=true` +
           `&country=se` +
           `&types=address` +
