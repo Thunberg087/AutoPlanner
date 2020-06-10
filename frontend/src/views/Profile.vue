@@ -32,6 +32,27 @@
           <button type="submit" class="btn-cancel" @click="closeForm">Avbryt</button>
         </form>
       </div>
+      <h2>Hur mycket tid behöver du på morgonen?</h2>
+      <select
+        name="time-margin"
+        id="time-margin"
+        v-model="pickedTimeMargin"
+        @change="pickTimeMargin()"
+      >
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+        <option value="30">30</option>
+        <option value="35">35</option>
+        <option value="40">40</option>
+        <option value="45">45</option>
+        <option value="50">50</option>
+        <option value="55">55</option>
+        <option value="60">60</option>
+      </select>
+      <p id="time-margin-minutes">min</p>
       <change-password></change-password>
     </div>
   </div>
@@ -49,7 +70,8 @@ export default {
       fetchedLocations: [],
       userLocations: [],
       pickedLocation: {},
-      locationNick: ""
+      locationNick: "",
+      pickedTimeMargin: ""
     };
   },
   watch: {
@@ -79,6 +101,25 @@ export default {
   },
   created() {
     this.getLocationList();
+
+    console.log("created");
+
+    let url =
+      process.env.VUE_APP_HOST + ":" + process.env.VUE_APP_SERVER_PORT + "/";
+
+    this.axios
+      .post(url + "usersettings/getTimeMargin", {
+        userId: this.$store.getters.getUser.id
+      })
+      .then(res => {
+        console.log("hej");
+        console.log(res.data[0].timeMargin);
+        this.pickedTimeMargin = res.data[0].timeMargin;
+        console.log(this.pickedTimeMargin);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
   methods: {
     getLocationList() {
@@ -159,6 +200,24 @@ export default {
         })
         .catch(err => {
           this.errorMessage = err.response.data.msg;
+        });
+    },
+    pickTimeMargin() {
+      console.log("pickedTimeMargin");
+
+      let url =
+        process.env.VUE_APP_HOST + ":" + process.env.VUE_APP_SERVER_PORT + "/";
+
+      this.axios
+        .post(url + "usersettings/setTimeMargin", {
+          userId: this.$store.getters.getUser.id,
+          timeMargin: this.pickedTimeMargin
+        })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
         });
     }
   }
@@ -283,5 +342,9 @@ ul {
 }
 .btn-cancel:hover {
   opacity: 1;
+}
+#time-margin-minutes {
+  display: inline;
+  margin-left: 5px;
 }
 </style>

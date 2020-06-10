@@ -47,5 +47,29 @@ router.post('/deleteLocation', (req, res) => {
 
 })
 
+router.post('/setTimeMargin', (req, res) => {
+
+  mysqlConnection.query(
+    `UPDATE users SET timeMargin = ${mysqlConnection.escape(req.body.timeMargin)} WHERE id = ${mysqlConnection.escape(req.body.userId)}`, (err, result) => {
+      if (err) {
+        console.log(err)
+        return res.status(500).send()
+      }
+      res.status(200).send(result)
+    }
+  )
+})
+
+router.post('/getTimeMargin', (req, res) => {
+  mysqlConnection.query(
+    `SELECT timeMargin FROM users WHERE id = ${mysqlConnection.escape(req.body.userId)}`, (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).send();
+      }
+      res.status(200).send(result)
+    });
+})
+
 
 module.exports = router;
