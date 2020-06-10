@@ -2,9 +2,9 @@
   <div class="wrapper">
     <h2>Ändra lösenord</h2>
     <div class="reset-password">
-      <input type="text" v-model="oldPass" placeholder="Nuvarande lösenord" />
-      <input type="text" v-model="newPass" placeholder="Nytt lösenord" />
-      <input type="text" v-model="repeatedPass" placeholder="Upprepa lösenord" />
+      <input type="password" v-model="oldPass" placeholder="Nuvarande lösenord" />
+      <input type="password" v-model="newPass" placeholder="Nytt lösenord" />
+      <input type="password" v-model="repeatedPass" placeholder="Upprepa lösenord" />
       <button @click="savePassword()">Spara</button>
     </div>
   </div>
