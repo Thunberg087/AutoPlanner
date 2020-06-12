@@ -84,30 +84,37 @@ export default {
 <style scoped>
 .autocompleteForm input {
   display: block;
+  position: relative;
+  z-index: 1;
+  width: calc(100% - 30px);
+  margin: 15px auto;
+  padding: 15px 15px;
   border: none;
   border-radius: 15px;
-  padding: 15px 10px;
-  margin: 15px 0px;
-  width: 100%;
   font-family: "Spartan", sans-serif;
 }
+.autocompleteForm input:focus {
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+}
 .autocomplete-results {
-  background: white;
+  position: relative;
+  z-index: 0;
+  top: -40px;
+  padding: 30px 0;
+  background-color: #a5d9ef;
   border-radius: 15px;
   height: auto;
-  width: 93%;
+  width: 100%;
   max-height: 200px;
   overflow: hidden;
   overflow-y: scroll;
-  -ms-overflow-style: none;
   list-style: none;
-}
-.autocomplete-results::-webkit-scrollbar {
-  display: none;
+  text-align: left;
 }
 .autocomplete-result {
   padding: 5px;
-  margin: 5px 0px;
+  margin: 5px 10px;
   font-family: "Spartan", sans-serif;
+  cursor: pointer;
 }
 </style>

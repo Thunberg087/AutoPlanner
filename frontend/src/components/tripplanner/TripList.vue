@@ -116,6 +116,10 @@ export default {
 </script>
 
 <style scoped>
+h2 {
+  font-family: "Spartan", sans-serif;
+  font-weight: 500;
+}
 .trip-list {
   font-family: "Spartan", sans-serif;
   text-align: center;
