@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div>
+      <trip-details-modal v-model="modalOpen" v-bind:trip="clickedTrip"></trip-details-modal>
+    </div>
+
     <h2>Möjliga resalternativ</h2>
     <table v-if="resultsReady == true" class="trip-list">
       <tr>
@@ -15,32 +19,18 @@
         <td>{{ trip.Leg[ trip.Leg.length - 1 ].Destination.time }}</td>
       </tr>
     </table>
-
-    <div v-if="showTripDetails">
-      <h2>Resedetaljer:</h2>
-      <table class="trip-list">
-        <tr>
-          <th>Resdel:</th>
-          <th>Färdsätt:</th>
-          <th>Avgång:</th>
-          <th>Ankomst:</th>
-        </tr>
-        <tr v-for="(leg, i) in clickedTrip.Leg" :key="i">
-          <td>{{ i + 1 }}</td>
-          <td>{{ leg.name }}</td>
-          <td>{{ leg.Origin.time }}</td>
-          <td>{{ leg.Destination.time }}</td>
-        </tr>
-      </table>
-    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import TripDetailsModal from "./TripDetailsModal";
 
 export default {
   name: "Trip",
+  components: {
+    TripDetailsModal
+  },
   created() {
     this.getTripData();
   },
@@ -50,7 +40,7 @@ export default {
       resultsReady: false,
       isOpen: false,
       clickedTrip: null,
-      showTripDetails: false
+      modalOpen: false
     };
   },
   props: {
@@ -66,9 +56,12 @@ export default {
     }
   },
   methods: {
+    openModal() {
+      this.modalOpen = !this.modalOpen;
+    },
     tripClicked(trip) {
       this.clickedTrip = trip;
-      this.showTripDetails = true;
+      this.modalOpen = !this.modalOpen;
     },
     getTravelTime(origin, dest) {
       let originTime = new Date(origin.date + "T" + origin.time + ":00");
@@ -158,5 +151,45 @@ export default {
   text-align: left;
   background-color: #4c86aa;
   color: white;
+}
+
+.trip-card {
+  background-color: #f2f2f2;
+  padding: 30px;
+  margin: 20px 0;
+  border-radius: 1em;
+}
+
+.trip-overview {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-row: auto auto;
+  grid-column-gap: 5px;
+  grid-row-gap: 10px;
+}
+
+.trip-leg {
+  background-color: #c3e6f4;
+  padding: 30px;
+  margin: 20px 0;
+  border-radius: 1em;
+}
+
+.leg-overview {
+  margin-bottom: 20px;
+}
+
+.leg-overview h3 {
+  padding: 10px;
+  background: grey;
+  margin-bottom: 10px;
+}
+
+.leg-details {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-row: auto auto;
+  grid-column-gap: 5px;
+  grid-row-gap: 10px;
 }
 </style>

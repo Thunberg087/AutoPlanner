@@ -100,6 +100,7 @@ export default {
   overflow: hidden;
   overflow-y: scroll;
   -ms-overflow-style: none;
+  list-style: none;
 }
 .autocomplete-results::-webkit-scrollbar {
   display: none;
