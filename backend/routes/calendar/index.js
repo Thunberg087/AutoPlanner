@@ -16,9 +16,9 @@ router.post('/addEvent', (req, res) => {
 
 
   mysqlConnection.query(
-    `INSERT INTO events (id, userId, title, start, end, allDay) 
+    `INSERT INTO events (id, userId, title, start, end, allDay, locationId) 
     VALUES (${mysqlConnection.escape(uuid.v4())}, ${mysqlConnection.escape(req.body.userId)}, ${mysqlConnection.escape(req.body.title)}, 
-    ${mysqlConnection.escape(req.body.start)}, ${mysqlConnection.escape(req.body.end)}, ${mysqlConnection.escape(req.body.allDay)}) `, (err, result) => {
+    ${mysqlConnection.escape(req.body.start)}, ${mysqlConnection.escape(req.body.end)}, ${mysqlConnection.escape(req.body.allDay)}, ${mysqlConnection.escape(req.body.locationId)}) `, (err, result) => {
     if (err) {
       console.log(err);
       return res.status(500).send();
@@ -34,7 +34,7 @@ router.post('/getEvents', (req, res) => {
   console.log(req.body);
 
   mysqlConnection.query(
-    `SELECT * FROM events WHERE userId = ${mysqlConnection.escape(req.body.userId)}`, (err, result) => {
+    `SELECT * FROM events WHERE events.userId = ${mysqlConnection.escape(req.body.userId)}`, (err, result) => {
       if (err) {
         console.log(err);
         return res.status(500).send();
@@ -48,13 +48,16 @@ router.post('/getEvent', (req, res) => {
   console.log(req.body.id);
 
   mysqlConnection.query(
-    `SELECT * FROM events WHERE id = ${mysqlConnection.escape(req.body.id)}`, (err, result) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).send();
-      }
-      res.status(200).send(result)
-    });
+    `SELECT * FROM events
+    INNER JOIN locations ON events.locationId = locations.id
+     WHERE events.id = ${mysqlConnection.escape(req.body.id)}`, (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send();
+    }
+    console.log(result)
+    res.status(200).send(result)
+  });
 
 });
 
