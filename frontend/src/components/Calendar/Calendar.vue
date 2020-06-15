@@ -28,10 +28,15 @@
         <div class="checkboxWrapper">
           <div class="selectWrapper">
             <select v-model="selected">
-              <option disabled value>Välj en plats</option>
-              <option>A</option>
-              <option>B</option>
-              <option>C</option>
+              <option disabled value="empty">Välj en plats</option>
+              <option
+                :value="location.id"
+                :key="location.id"
+                v-for="location in newEvent.userLocations"
+              >
+                <span v-if="location.altLocationName">{{location.altLocationName}}</span>
+                <span v-else>{{location.locationName}}</span>
+              </option>
             </select>
           </div>
           <input v-model="newEvent.eventAllDay" type="checkbox" id="checkbox" />
@@ -61,6 +66,7 @@
 
     <div class="showEventInfoPopup" v-if="eventInfo">
       <div class="showTitleBox">Titel: {{eventInfo.title}}</div>
+      <div class="showPlaceBox">Plats: {{eventInfo.locationName}}</div>
 
       <div class="showTimeBox">Start: {{eventInfo.start}}</div>
       <div class="showTimeBox">Slut: {{eventInfo.end}}</div>
@@ -102,11 +108,13 @@ export default {
         eventEndTime: null,
         eventStartDate: null,
         eventEndDate: null,
-        eventAllDay: false
+        eventAllDay: false,
+        userLocations: []
       },
       errorMessage: null,
       statusAddEventPopup: false,
-      eventInfo: null
+      eventInfo: null,
+      selected: "empty"
     };
   },
   watch: {
@@ -135,6 +143,20 @@ export default {
   methods: {
     openAddEventPopup() {
       this.statusAddEventPopup = true;
+      let url =
+        process.env.VUE_APP_HOST + ":" + process.env.VUE_APP_SERVER_PORT + "/";
+
+      this.axios
+        .post(url + "usersettings/getLocationList", {
+          userId: this.$store.getters.getUser.id
+        })
+        .then(res => {
+          this.newEvent.userLocations = res.data;
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     addEvent() {
       let start = this.newEvent.eventStartTime
@@ -149,7 +171,8 @@ export default {
         start,
         end,
         allDay: this.newEvent.eventAllDay,
-        userId: this.$store.getters.getUser.id
+        userId: this.$store.getters.getUser.id,
+        locationId: this.selected
       };
       let url =
         process.env.VUE_APP_HOST + ":" + process.env.VUE_APP_SERVER_PORT + "/";
