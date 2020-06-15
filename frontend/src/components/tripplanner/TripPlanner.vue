@@ -47,6 +47,6 @@ h1 {
 }
 .form {
   display: block;
-  width: 20vw;
+  width: 100%;
 }
 </style>
