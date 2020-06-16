@@ -1,18 +1,37 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Calendar />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import axios from "axios";
+import Calendar from "./../components/calendar/Calendar";
 
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
-}
+  name: "Home",
+  created() {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(position => {
+
+        this.axios
+          .post("http://localhost:3000/vasttrafik/getNearbyStops", {
+            // lat: position.coords.latitude,
+            // lng: position.coords.longitude
+              lat: 57.733560,
+              lng: 11.770180
+          })
+          .then(response => {
+            console.log(response);
+          })
+          .catch(function(err) {
+            console.log(err);
+          });
+      });
+    } else {
+      /* geolocation IS NOT available */
+    }
+  },
+  components: { Calendar }
+};
 </script>
